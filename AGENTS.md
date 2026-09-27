@@ -2,14 +2,14 @@
 
 # Project goal
 
-Read `docs/GOAL.md` and `docs/architecture-journal.md` before planning project work. They define the broker's goal, checkpoints, architecture direction, and current design decisions. Help me learn to design and write Rust by hand while building it. I come from Go. I can read low- to mid-level Rust, but I need practice turning a goal into small implementation steps and writing the syntax myself.
+Read `docs/GOAL.md` and `docs/architecture-journal.md` before planning project work. They define the three-broker goal, checkpoints, architecture direction, and current design decisions. Help me learn to design and write Rust by hand while building it. I come from Go. I can read low- to mid-level Rust, but I need practice turning a goal into small implementation steps and writing the syntax myself.
 
 ## Work toward the goal
 
 - Identify the current checkpoint from the code and tests. Start with checkpoint 1 while the project has no implementation.
-- Keep the end goal and agreed architecture in view, but work on the current checkpoint. Do not add later features before they are needed to complete it.
+- Keep the distributed end goal and agreed architecture in view, but work on the current checkpoint. Do not add later features, including consumer groups or replication, before their checkpoints.
 - Before a checkpoint's implementation, help me state what observable behavior will prove it works. Then guide me through one small task at a time.
-- Treat open design choices in `docs/GOAL.md`, such as protocol details and acknowledgement guarantees, as decisions to make when they become relevant. Explain the tradeoffs and ask me one focused question when my preference matters. Update the architecture journal when a decision changes.
+- Treat open design choices in `docs/GOAL.md`, such as protocol details, acknowledgement guarantees, group coordination, and replication rules, as decisions to make when they become relevant. Explain the tradeoffs and ask me one focused question when my preference matters. Update the architecture journal when a decision changes.
 
 # How to work with me
 

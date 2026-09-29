@@ -35,13 +35,14 @@ Later, consumers own the work they perform on records. Group coordination assign
 - Hold the lock only while looking up and operating on a log. Release it before waiting for network input or writing a response.
 - Start with one in-memory partition log, while keeping handler, broker, and log responsibilities separate. Add disk storage and then multiple logs inside those boundaries.
 - Requests should identify a topic and partition from the start, even when only one is supported. A read also names an offset. A successful publish returns its assigned offset.
+- Network requests use a fixed four-byte big-endian length prefix. Reject request bodies larger than 1 MiB before reading or allocating the body. Payloads are raw bytes in a binary protocol, not JSON text.
 - The long-term target is three brokers that tolerate one broker failure. This target does not imply that the in-memory or single-broker checkpoints provide the same guarantee.
 
 The first lock can cover the whole broker. If independent partitions need more concurrency later, move locking into each partition without changing the client protocol or log rules.
 
 ## Decisions to make when needed
 
-- Before building the TCP path, define wire framing, request and response shapes, error replies, and maximum request size. TCP carries bytes, not complete requests.
+- Before building the TCP path, finish the request and response shapes and error replies. TCP carries bytes, not complete requests.
 - At the durable-log checkpoint, define exactly when a publish reply is sent and what it guarantees after a broker crash.
 - Before accepting unbounded concurrent clients, set connection limits and timeouts.
 - At the consumer-progress checkpoint, decide where positions are saved and what happens if a consumer fails between processing a record and saving its position.
@@ -52,5 +53,5 @@ The first lock can cover the whole broker. If independent partitions need more c
 
 - **Initial checkpoint:** 1. The repository had no implementation when this plan was written. Determine later progress from the code and tests.
 - **Proof for checkpoint 1:** Run a broker; publish from one client process; read the same bytes and offset from another; report an absent offset cleanly. Allow the clients to connect at the same time.
-- **First design step:** Agree on one publish request and response, including how the receiver finds the end of a request and rejects an oversized one.
+- **Next implementation step:** Build the one in-memory partition log, then connect it to the broker's TCP path. Framing and the request-size limit are already decided; finish the remaining protocol details when the TCP path needs them.
 - **For the AI coach:** Let Abhishek write the Rust. Explain one boundary or decision at a time, then give one small task. Keep later checkpoint work out of the current task while keeping the three-broker finish line visible.

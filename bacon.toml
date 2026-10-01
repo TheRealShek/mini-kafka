@@ -1,0 +1,35 @@
+#:schema https://dystroy.org/bacon/.bacon.schema.json
+
+default_job = "check"
+env.CARGO_TERM_COLOR = "always"
+
+# Check the library while the broker executable is still empty.
+[jobs.check]
+command = ["cargo", "check", "--lib"]
+need_stdout = false
+
+# Lint the library.
+[jobs.clippy]
+command = ["cargo", "clippy", "--lib"]
+need_stdout = false
+
+# Run the library's unit tests.
+[jobs.test]
+command = ["cargo", "test", "--lib"]
+need_stdout = true
+
+# Run only the broker executable.
+[jobs.run]
+command = ["cargo", "run", "--bin", "broker"]
+need_stdout = true
+allow_warnings = true
+background = true
+show_command_error_code = true
+scroll_anchor = "auto"
+
+[keybindings]
+k = "job:check"
+a = "job:check-all"
+c = "job:clippy"
+t = "job:test"
+r = "job:run"
